@@ -4,6 +4,7 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user.routes.js'
+import taskRoutes from './routes/task.route.js'
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(cookieParser());
 
 
 app.use('/api/user',userRoutes)
+app.use('/api/task',taskRoutes)
 
 app.listen(3000,()=>{
     console.log(`server running fine`)
