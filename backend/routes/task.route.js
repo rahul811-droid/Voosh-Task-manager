@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/addtask',verifyToken,createTask);
 router.put('/update/:taskId/:userId',verifyToken,updateTask);
-router.get('/getall/',verifyToken,getallTask);
+router.get('/getall',getallTask);
 router.delete('/delete/:taskId/:userId',verifyToken,deleteTask);
 router.get('/getonetask/:taskId/',verifyToken,getOneTask);
 
