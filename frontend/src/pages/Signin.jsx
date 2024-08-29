@@ -58,7 +58,7 @@ const Signin = () => {
     <div className='min-h-screen mt-20 flex items-center flex-col'>
       <h1 className='mr-60 text-2xl font-bold text-blue-500'>Login</h1>
 
-      <div className='w-[400px] h-[300px] mt-2 border-2 shadow-md rounded-md border-blue-500 mx-auto sm:w-[400px] sm:h-[250px] md:w-[350px] md:h-[275px] lg:w-[400px] lg:h-[300px]'>
+      <div className='w-[300px] h-[300px] mt-2 border-2 shadow-md rounded-md border-blue-500 mx-auto sm:w-[400px] sm:h-[250px] md:w-[350px] md:h-[275px] lg:w-[400px] lg:h-[300px]'>
 
       <form onSubmit={handleSubmit}>
     
@@ -71,7 +71,7 @@ const Signin = () => {
       </form>
 
       <p className='text-center mt-2 font-semibold '>Don't have an account?    <span onClick={()=>navigate('/signup')} className='text-blue-500 font-semibold cursor-pointer'>Signup</span></p>
-      <button className='h-10  w-[50%] mt-2 text-white  flex mx-auto  font-semibold border-2 p-2 shadow-sm bg-blue-500 rounded-md'>  <OAuth/></button>
+      <button className='h-10  w-[50%] mt-2 text-white  flex mx-auto  font-semibold border-2 p-2 shadow-sm bg-blue-500 rounded-md'><OAuth/></button>
       </div>
 
       {errorMessage && (

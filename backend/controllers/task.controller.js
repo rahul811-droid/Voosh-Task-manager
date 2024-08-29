@@ -82,17 +82,16 @@ export const getallTask = async (req, res, next) => {
 
 
 export const deleteTask = async (req, res, next) => {
-  if (!req.user || req.user.id !== req.params.userId) {
-    return next(errorHandler(403, 'You are not allowed to delete this Task'));
-  }
-  try {
-    await Task.findOneAndDelete(req.params.taskId);
-    res.status(200).json('Thos Task has been deleted');
-  } catch (error) {
-    console.log("error in delete task function", error)
-
+  // Check if the user is authorized to delete this task
+  if(!req.user || req.user.id !== req.params.userId){
+    return next(errorHandler(403,'You are not allowed to delete this post'));
+ }
+ try {
+    await Task.findByIdAndDelete(req.params.taskId);
+    res.status(200).json('Thos post has been deleted');
+ } catch (error) {
     next(error)
-  }
+ }
 }
 
 

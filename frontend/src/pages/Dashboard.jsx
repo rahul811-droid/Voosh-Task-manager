@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TaskManager from '../components/TaskManager';
 import TaskModal from '../components/TaskModal'; // Import the modal component
 
@@ -9,9 +9,27 @@ const Dashboard = () => {
         description: ""
     });
     const [error, setError] = useState(null);
+    const [userTasks, setUserTasks] = useState([]); // Move userTasks here
+    const [tasksUpdated, setTasksUpdated] = useState(false); // State to trigger refetch
 
     const handleOpenModal = () => setIsModalOpen(true);
     const handleCloseModal = () => setIsModalOpen(false);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const res = await fetch('/api/task/getalltask');
+                const data = await res.json();
+                if (res.ok) {
+                    setUserTasks(data);
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        };
+
+        fetchPosts();
+    }, [tasksUpdated]); // Refetch tasks when tasksUpdated changes
 
     const handleAddTask = async () => {
         try {
@@ -25,6 +43,7 @@ const Dashboard = () => {
                 setFormData({ title: "", description: "" }); // Clear form data
                 setError(null); // Clear error
                 handleCloseModal(); // Close modal
+                setTasksUpdated(prev => !prev); // Trigger refetch
                 return "Task added successfully";
             } else {
                 setError(data.message || "An error occurred");
@@ -65,7 +84,7 @@ const Dashboard = () => {
                 </p>
             </div>
             <div className=''>
-                <TaskManager />
+                <TaskManager userTasks={userTasks} setUserTasks={setUserTasks} />
             </div>
             <TaskModal
                 isOpen={isModalOpen}

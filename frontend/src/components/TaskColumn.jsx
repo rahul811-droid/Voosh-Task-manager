@@ -8,7 +8,7 @@ const TaskColumn = ({ status, tasks, onViewDetails, onEdit,onDelete }) => (
             <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
-                className='w-full sm:w-[30%] shadow-sm max-h-screen border-2 m-2'
+                className='w-full sm:w-[30%] shadow-sm h-auto border-2 m-2'
             >
                 <h2 className='w-full text-xl pl-2 text-white bg-blue-500'>{status}</h2>
                 <div className='flex flex-col gap-3 p-2'>

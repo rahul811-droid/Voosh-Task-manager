@@ -56,7 +56,7 @@ const Signup = () => {
     <div className='min-h-screen mt-20 flex items-center flex-col'>
       <h1 className='mr-60 text-2xl font-bold text-blue-500'>Signup</h1>
 
-      <div className='w-[400px] h-[450px] mt-2 border-2 shadow-md rounded-md border-blue-500 mx-auto sm:w-[400px] sm:h-[300px] md:w-[350px] md:h-[450px] lg:w-[400px] lg:h-[450px]'>
+      <div className='w-[300px] h-[450px] mt-2 border-2 shadow-md rounded-md border-blue-500 mx-auto sm:w-[400px] sm:h-[300px] md:w-[350px] md:h-[450px] lg:w-[400px] lg:h-[450px]'>
 
         <form onSubmit={handleSubmit}>
           <div className='flex flex-col items-center gap-3 mt-10'>

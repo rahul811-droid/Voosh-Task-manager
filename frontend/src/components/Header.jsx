@@ -33,8 +33,8 @@ const handleSignOut = async()=>{
   }
 
   return (
-    <div className='h-[80px] max-w-full mx-auto bg-blue-500 flex justify-between'>
-      <h2 className='flex gap-3 items-center ml-5 text-white text-2xl'>
+<div className=' h-[80px]  mx-0 bg-blue-500 flex justify-between md:h-[60px] sm:h-[50px]'>
+<h2 className='flex gap-3 items-center ml-5 text-white text-2xl'>
         Task Manager 
         <span>
           <CgNotes className='text-2xl' />
@@ -51,7 +51,7 @@ const handleSignOut = async()=>{
 ) : (
   <>
     <button 
-      onClick={() => navigate('/')} 
+      onClick={() => navigate('/login')} 
       className='text-xl font-semibold bg-white h-10 w-20 rounded-lg cursor-pointer hover:bg-slate-200 active:bg-slate-300 md:text-lg md:w-20 md:h-9 sm:text-base sm:w-16 sm:h-8'>
       Login
     </button>

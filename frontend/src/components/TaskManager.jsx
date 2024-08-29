@@ -5,33 +5,14 @@ import TaskColumn from './TaskColumn';
 import TaskDetailModal from './TaskDetailModal'; // Import the detail modal
 import EditTaskModal from './EditTaskModal'; // Import the edit task modal
 
-const TaskManager = () => {
+const TaskManager = ({ userTasks, setUserTasks }) => { // Receive props
     const { currentUser } = useSelector((state) => state.user);
 
-    const [userTasks, setUserTasks] = useState([]);
     const [taskToDelete, setTaskToDelete] = useState(null);
     const [taskToEdit, setTaskToEdit] = useState(null);
     const [taskToView, setTaskToView] = useState(null); // Add state for view details
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
-    useEffect(() => {
-        const fetchPosts = async () => {
-            try {
-                const res = await fetch('/api/task/getalltask');
-                const data = await res.json();
-                if (res.ok) {
-                    setUserTasks(data);
-                }
-            } catch (error) {
-                console.log(error.message);
-            }
-        };
-
-        if (currentUser) {
-            fetchPosts();
-        }
-    }, [currentUser]);
 
     const onDragEnd = async (result) => {
         const { source, destination } = result;

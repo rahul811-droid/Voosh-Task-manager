@@ -34,7 +34,7 @@ export default function OAuth() {
   return (
     <div>
      <button onClick={handleGoogleClick}  className='ml-6'
-    >Login with Google</button>
+    >Google Login</button>
     </div>
    
   )
