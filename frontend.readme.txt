@@ -1,0 +1,66 @@
+### README
+
+Welcome to the frontend of our project!
+
+This frontend application leverages the following technologies:
+
+- **React**: A powerful library for building user interfaces. React's component-based architecture helps create interactive UIs efficiently.
+- **Redux**: Used for state management, Redux helps in maintaining a predictable state across the application and managing complex state interactions.
+- **Tailwind CSS**: Provides a utility-first approach to styling, making it easy to create responsive and customizable designs without leaving the HTML.
+- **Vite**: A modern build tool that provides fast development and optimized production builds for a smoother development experience.
+
+#### Getting Started
+
+1. **Clone the Repository**
+
+   ```bash
+   git clone https://github.com/rahul811-droid/Voosh-Task-manager
+   ```
+
+2. **Install Dependencies**
+
+   Navigate to the project directory and install the required packages:
+
+   ```bash
+   cd <project-directory>
+   npm install
+   ```
+
+3. **Run the Development Server**
+
+   Start the development server with:
+
+   ```bash
+   npm run dev
+   ```
+
+   This will open the application in your default browser at `http://localhost:3000`.
+
+4. **Build for Production**
+
+   To create an optimized production build, use:
+
+   ```bash
+   npm run build
+   ```
+
+   The production files will be generated in the `dist` directory.
+
+#### Folder Structure
+
+- **src/**: Contains all source files.
+  - **components/**: Reusable UI components.
+  - **pages/**: Different pages of the application.
+  - **redux/**: Redux setup, including actions and reducers.
+  - **styles/**: Tailwind CSS configurations and custom styles.
+  - **App.jsx**: Main application component.
+
+#### Contributing
+
+Feel free to contribute to this project by submitting issues or pull requests. Ensure that your code adheres to the existing style and passes all tests.
+
+#### License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+For any questions or support, please contact rahul25062@gmail.com

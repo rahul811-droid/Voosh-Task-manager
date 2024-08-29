@@ -1,104 +1,143 @@
 import React, { useState, useEffect } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
-import axios from 'axios';
+import { DragDropContext } from 'react-beautiful-dnd';
+import { useSelector } from 'react-redux';
+import TaskColumn from './TaskColumn';
+import TaskDetailModal from './TaskDetailModal'; // Import the detail modal
+import EditTaskModal from './EditTaskModal'; // Import the edit task modal
 
 const TaskManager = () => {
-    const [tasks, setTasks] = useState({});
+    const { currentUser } = useSelector((state) => state.user);
+
+    const [userTasks, setUserTasks] = useState([]);
+    const [taskToDelete, setTaskToDelete] = useState(null);
+    const [taskToEdit, setTaskToEdit] = useState(null);
+    const [taskToView, setTaskToView] = useState(null); // Add state for view details
+    const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     useEffect(() => {
-        // Fetch tasks from the server
-        axios.get('/api/task/getall')
-            .then(res => setTasks(groupTasksByStatus(res.data)))
-            .catch(err => console.error(err));
-    }, []);
-
-    console.log(tasks)
-    const groupTasksByStatus = (tasks) => {
-        return {
-            'To Do': tasks.filter(task => task.status === 'To Do'),
-            'In Progress': tasks.filter(task => task.status === 'In Progress'),
-            'Done': tasks.filter(task => task.status === 'Done')
+        const fetchPosts = async () => {
+            try {
+                const res = await fetch('/api/task/getalltask');
+                const data = await res.json();
+                if (res.ok) {
+                    setUserTasks(data);
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
         };
-    };
 
-    const handleDragEnd = (result) => {
+        if (currentUser) {
+            fetchPosts();
+        }
+    }, [currentUser]);
+
+    const onDragEnd = async (result) => {
         const { source, destination } = result;
+
         if (!destination) return;
 
-        const sourceColumn = tasks[source.droppableId];
-        const destinationColumn = tasks[destination.droppableId];
+        const updatedTasks = [...userTasks];
+        const [movedTask] = updatedTasks.splice(source.index, 1);
+        movedTask.status = destination.droppableId;
+        updatedTasks.splice(destination.index, 0, movedTask);
 
-        const [movedTask] = sourceColumn.splice(source.index, 1);
-        destinationColumn.splice(destination.index, 0, movedTask);
+        setUserTasks(updatedTasks);
 
-        setTasks({
-            ...tasks,
-            [source.droppableId]: sourceColumn,
-            [destination.droppableId]: destinationColumn
-        });
-
-        // Update task status in the backend
-        // axios.put(`/api/tasks/${movedTask._id}`, { status: destination.droppableId })
-        //     .catch(err => console.error(err));
+        try {
+            await fetch(`/api/task/update/${movedTask._id}/${currentUser._id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: movedTask.status })
+            });
+        } catch (error) {
+            console.log(error.message);
+        }
     };
 
+    const handleDelete = async (taskId) => {
+        try {
+            await fetch(`/api/task/delete/${taskId}/${currentUser._id}`, {
+                method: 'DELETE'
+            });
+            setUserTasks(userTasks.filter(task => task._id !== taskId));
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
+    const handleEdit = async (task) => {
+        setTaskToEdit(task);
+        setIsEditModalOpen(true);
+    };
+
+    const handleViewDetails = (task) => {
+        setTaskToView(task); // Set task to view
+        setIsDetailModalOpen(true);
+    };
+
+    const handleUpdateTask = async (updatedTask) => {
+        try {
+            const res = await fetch(`/api/task/update/${updatedTask._id}/${currentUser._id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(updatedTask)
+            });
+            if (res.ok) {
+                const updatedTasks = userTasks.map(task =>
+                    task._id === updatedTask._id ? updatedTask : task
+                );
+                setUserTasks(updatedTasks);
+                setIsEditModalOpen(false);
+            }
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
+    const tasksByStatus = {
+        TODO: [],
+        'IN PROGRESS': [],
+        DONE: [],
+    };
+
+    userTasks.forEach(task => {
+        const status = task.status.toUpperCase();
+        if (tasksByStatus[status]) {
+            tasksByStatus[status].push(task);
+        }
+    });
+
     return (
-        <DragDropContext onDragEnd={handleDragEnd}>
-            <div style={boardStyle}>
-                {['To Do', 'In Progress', 'Done'].map((status, index) => (
-                    <Droppable droppableId={status} key={index}>
-                        {(provided) => (
-                            <div
-                                ref={provided.innerRef}
-                                {...provided.droppableProps}
-                                style={columnStyle}
-                            >
-                                <h2>{status}</h2>
-                                {tasks[status]?.map((task, index) => (
-                                    <Draggable key={task._id} draggableId={task._id} index={index}>
-                                        {(provided) => (
-                                            <div
-                                                ref={provided.innerRef}
-                                                {...provided.draggableProps}
-                                                {...provided.dragHandleProps}
-                                                style={{ ...taskStyle, ...provided.draggableProps.style }}
-                                            >
-                                                <h4>{task.title}</h4>
-                                                <p>{task.description}</p>
-                                            </div>
-                                        )}
-                                    </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </div>
-                        )}
-                    </Droppable>
-                ))}
-            </div>
-        </DragDropContext>
+        <div>
+            <DragDropContext onDragEnd={onDragEnd}>
+                <div className='max-w-full flex flex-col sm:flex-row gap-3 max-h-full shadow-lg p-4'>
+                    {['TODO', 'IN PROGRESS', 'DONE'].map((status) => (
+                        <TaskColumn
+                            key={status}
+                            status={status}
+                            tasks={tasksByStatus[status]}
+                            onDelete={handleDelete} 
+                            onEdit={handleEdit}
+                            onViewDetails={handleViewDetails} // Pass the function here
+                        />
+                    ))}
+                </div>
+            </DragDropContext>
+            <TaskDetailModal
+                isOpen={isDetailModalOpen}
+                onClose={() => setIsDetailModalOpen(false)}
+                task={taskToView} // Use taskToView for details
+            />
+            <EditTaskModal
+                isOpen={isEditModalOpen}
+                onClose={() => setIsEditModalOpen(false)}
+                task={taskToEdit}
+                onUpdateTask={handleUpdateTask}
+            />
+        </div>
     );
-};
-
-const boardStyle = {
-    display: 'flex',
-    justifyContent: 'space-around',
-    padding: '20px'
-};
-
-const columnStyle = {
-    width: '30%',
-    minHeight: '400px',
-    backgroundColor: '#f4f4f4',
-    padding: '10px',
-    borderRadius: '5px'
-};
-
-const taskStyle = {
-    padding: '10px',
-    margin: '10px 0',
-    backgroundColor: '#fff',
-    borderRadius: '5px',
-    boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
 };
 
 export default TaskManager;

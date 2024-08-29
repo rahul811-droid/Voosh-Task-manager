@@ -45,13 +45,13 @@ const handleSignOut = async()=>{
       {currentUser ? (
   <button 
     onClick={handleSignOut} 
-    className='text-xl font-semibold bg-white h-10 w-20 rounded-lg cursor-pointer hover:bg-slate-200 active:bg-slate-300 md:text-lg md:w-20 md:h-9 sm:text-base sm:w-16 sm:h-8'>
-    Signout
+    className='text-xl font-semibold bg-red-400 h-10 w-20 rounded-lg cursor-pointer hover:bg-slate-200 active:bg-slate-300 md:text-lg md:w-20 md:h-9 sm:text-base sm:w-16 sm:h-8'>
+    Logout
   </button>
 ) : (
   <>
     <button 
-      onClick={() => navigate('/login')} 
+      onClick={() => navigate('/')} 
       className='text-xl font-semibold bg-white h-10 w-20 rounded-lg cursor-pointer hover:bg-slate-200 active:bg-slate-300 md:text-lg md:w-20 md:h-9 sm:text-base sm:w-16 sm:h-8'>
       Login
     </button>

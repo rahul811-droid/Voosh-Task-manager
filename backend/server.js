@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user.routes.js'
 import taskRoutes from './routes/task.route.js'
+import path from 'path';
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ mongoose
     console.log(err);
   });
 
+  const __dirname = path.resolve();
 
 const app = express();
 
@@ -32,6 +34,11 @@ app.listen(3000,()=>{
     console.log(`server running fine`)
 })
 
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
+});
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;

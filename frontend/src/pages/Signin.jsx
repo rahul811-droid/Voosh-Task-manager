@@ -43,7 +43,7 @@ const Signin = () => {
       
       if (res.ok) {
         dispatch(signInSuccess(data))
-        navigate('/dashboard');
+        navigate('/dash');
       }
     } catch (error) {
     
