@@ -14,6 +14,8 @@ const TaskManager = ({ userTasks, setUserTasks }) => { // Receive props
     const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
+
+    console.log(currentUser)
     const onDragEnd = async (result) => {
         const { source, destination } = result;
 
